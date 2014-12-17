@@ -8,7 +8,7 @@ license-file:        LICENSE
 author:              Vjeran Crnjak
 maintainer:          vjeran.crnjak@gmail.com
 -- copyright:
-category:            Language
+category:            Natural Language Processing
 homepage:            https://github.com/vjeranc/moan
 build-type:          Simple
 -- extra-source-files:
