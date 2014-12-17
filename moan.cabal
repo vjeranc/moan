@@ -21,7 +21,7 @@ source-repository head
 library
   exposed-modules:     NLP.Morphosyntax.Analyzer
   -- other-modules:
-  other-extensions:    OverloadedStrings, RecordWildCards
+  other-extensions:    RecordWildCards
   build-depends:       base >=4.7 && <4.8
                      , zlib >=0.5 && <0.6
                      , binary >=0.7 && <0.8
