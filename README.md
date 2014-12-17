@@ -15,7 +15,7 @@ For a sufficiently large construction corpus this analyzer might only benefit fr
 
 If one needs the analyzer to be less aggressive, it is recommended to extend the functionality and remove the sets of possible tags from words which might be named (ex. capitalized words in the middle of a sentence). This is present mostly in use cases where part-of-speech tags of a language contain information whether a word represents a named entity or not, so if this is not a case, there will be no need to extend the current functionality.
 
-A simple example of using @GHCi@ for construction:
+A simple example of using ```GHCi``` for construction:
 
 ```Haskell
 import NLP.Morphosyntax.Analyzer
