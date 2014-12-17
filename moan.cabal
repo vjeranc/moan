@@ -3,17 +3,20 @@ version:             0.1.0.0
 synopsis:            Language-agnostic analyzer for positional morphosyntactic tags
 description:         Implementation of a space-efficient morphosyntactic analyzer.
                      It solves a problem of providing a set of possible tags for a given word.
-                     Instead of just matching on the word-set pair, one can assume that suffixes of
-                     an unknown word also hold some information about the set.
 license:             BSD3
 license-file:        LICENSE
 author:              Vjeran Crnjak
 maintainer:          vjeran.crnjak@gmail.com
 -- copyright:
 category:            Language
+homepage:            https://github.com/vjeranc/moan
 build-type:          Simple
 -- extra-source-files:
 cabal-version:       >=1.10
+
+source-repository head
+  type: git
+  location: https://github.com/vjeranc/moan.git
 
 library
   exposed-modules:     NLP.Morphosyntax.Analyzer
