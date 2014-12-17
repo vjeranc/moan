@@ -1,36 +1,19 @@
 moan
 ===================
 
-This package provides a morphosyntactic analyzer that is language-agnostic in a
-sense that if language uses positional tags (ex. [Multext East][MultextEast], [Polish tagset][nkjp-tagset], [Russian tagset][ru-tagset], etc.)
-this analyzer can be used. It is also possible to use it for part-of-speech tags only.
+This package provides a morphosyntactic analyzer that is language-agnostic in a sense that if language uses positional tags (ex. [Multext East][MultextEast], [Polish tagset][nkjp-tagset], [Russian tagset][ru-tagset], etc.) this analyzer can be used. It is also possible to use it for part-of-speech tags only.
 
-It solves a problem of providing a set of possible tags for a given word.
-Instead of just matching on the word-set pair, one can assume that suffixes of
-an unknown word also hold some information about the set.
+It solves a problem of providing a set of possible tags for a given word. Instead of just matching on the word-set pair, one can assume that suffixes of an unknown word also hold some information about the set.
 
 Usage
 ===================
 
 
-This library provides the functionality of that kind of analysis. One example of
-where this might be useful is 'concraft' tagging library. Before the POS-tagging
-one needs to have a set of possible tags for a word from which the correct one is
-disambiguated.
+This library provides the functionality of that kind of analysis. One example of where this might be useful is 'concraft' tagging library. Before the POS-tagging one needs to have a set of possible tags for a word from which the correct one is disambiguated.
 
-For a sufficiently large construction corpus this analyzer might only benefit from
-additional regular expressions for punctuation and number matching. There is a
-possibility of returning a set of possible tags that isn't complete - the set doesn't
-contain a correct tag. If construction corpus isn't sufficiently large, there might
-be a fair amount of incomplete sets on unseen named entities (person names, corporation
-names etc.).
+For a sufficiently large construction corpus this analyzer might only benefit from additional regular expressions for punctuation and number matching. There is a possibility of returning a set of possible tags that isn't complete - the set doesn't contain a correct tag. If construction corpus isn't sufficiently large, there might be a fair amount of incomplete sets on unseen named entities (person names, corporation names etc.).
 
-If one needs the analyzer to be less aggressive, it is recommended to extend the
-functionality and remove the sets of possible tags from words which might be named (ex.
-capitalized words in the middle of a sentence). This is present mostly in use cases
-where part-of-speech tags of a language contain information whether a word represents a
-named entity or not, so if this is not a case, there will be no need to extend the
-current functionality.
+If one needs the analyzer to be less aggressive, it is recommended to extend the functionality and remove the sets of possible tags from words which might be named (ex. capitalized words in the middle of a sentence). This is present mostly in use cases where part-of-speech tags of a language contain information whether a word represents a named entity or not, so if this is not a case, there will be no need to extend the current functionality.
 
 A simple example of using @GHCi@ for construction:
 
@@ -45,8 +28,7 @@ let train = map (\(word:tags) -> (word, map (P.parseTag tset) tags)) . map T.wor
 let an = create tset (AConf 3 [] M.empty) train
 save "analyzer.gz" an
 ```
-It is assumed that tag attributes are separated with @:@ for 'P.parseTag'. One could write a
-different parsing function.
+It is assumed that tag attributes are separated with ```:``` for ```P.parseTag```. One could write a different parsing function.
 
 [nkjp-tagset]: http://nkjp.pl/poliqarp/help/ense2.html
 [ru-tagset]: http://ufal.mff.cuni.cz/~hana/morph/rutags.html
