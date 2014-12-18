@@ -1,5 +1,5 @@
 name:                moan
-version:             0.1.0.0
+version:             0.2.0.0
 synopsis:            Language-agnostic analyzer for positional morphosyntactic tags
 description:         Implementation of a space-efficient morphosyntactic analyzer.
                      It solves a problem of providing a set of possible tags for a given word.

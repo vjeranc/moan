@@ -58,6 +58,8 @@ module NLP.Morphosyntax.Analyzer
 , save
 , load
 , create
+-- * Token matching
+, Matcher(..)
 -- * Configuration
 , AConf(..)
 ) where
@@ -66,7 +68,7 @@ import qualified Codec.Compression.GZip as GZip
 import           Control.Applicative    ((<$>), (<*>))
 import           Control.Arrow          (first, second, (&&&), (***))
 import           Control.Monad          (when)
-import           Data.Binary            (Binary, get, put)
+import           Data.Binary            (Binary, get, put, putWord8, getWord8)
 import qualified Data.Binary            as Binary
 import qualified Data.ByteString.Lazy   as BL
 import qualified Data.DAWG.Static       as D
@@ -78,6 +80,9 @@ import qualified Data.Set               as S
 import qualified Data.Tagset.Positional as P
 import qualified Data.Text              as T
 import           Data.Tuple             (swap)
+
+import           Data.Char
+
 import           Text.Regex.TDFA        ((=~))
 import           Text.Regex.TDFA.Text   ()
 
@@ -90,7 +95,45 @@ import           Prelude                hiding (elem, notElem)
 
 
 modelVersion :: String
-modelVersion = "0.1.0.0"
+modelVersion = "0.2.0.0"
+
+-- | Replaces the need of writing regular expressions for simple matching.
+-- Matching on punctuation, number, alphanumeric, upper-case tokens or
+-- regular expressions.
+data Matcher = Punct  -- ^ Matches a token with all punctuation characters.
+             | Number -- ^ Matches a token with all unicode numeral characters.
+             | AlphaNum -- ^ Matches a token with all alphanumeric characters.
+             | AnyUpper -- ^ Matches a token with at least one uppercase characther.
+             | AllUpper -- ^ Matches a token with all uppercase characters.
+             | AnyLower -- ^ Matches a token with at least one lowercase characther.
+             | AllLower -- ^ Matches a token with all lowercase characters.
+             | Capital  -- ^ Matches a capitalized token.
+             | RegExpr T.Text -- ^ Matches on a regular expression.
+     deriving (Eq, Show, Ord)
+
+instance Binary Matcher where
+    put Punct    = putWord8 0
+    put Number   = putWord8 1
+    put AlphaNum = putWord8 2
+    put AnyUpper = putWord8 3
+    put AllUpper = putWord8 4
+    put AnyLower = putWord8 5
+    put AllLower = putWord8 6
+    put Capital  = putWord8 7
+    put (RegExpr x) = putWord8 8 >> put x
+    get =
+        getWord8 >>=
+          \x -> case x of
+            0   -> return Punct
+            1   -> return Number
+            2   -> return AlphaNum
+            3   -> return AnyUpper
+            4   -> return AllUpper
+            5   -> return AnyLower
+            6   -> return AllLower
+            7   -> return Capital
+            8   -> RegExpr <$> Binary.get
+            _   -> error "Unable to parse the matchers - resulting in non-parsable analyzer."
 
 -- | Configuration for the analyzer.
 data AConf = AConf
@@ -100,7 +143,7 @@ data AConf = AConf
     -- | A list of regular expressions (POSIX) and accompanying set of tags.
     -- If a word matches a regular expression, the accompanying set of tags
     -- will be given as the set of possible tags.
-  , regexMatch       :: [(T.Text, S.Set P.Tag)]
+  , regexMatch       :: [(Matcher, S.Set P.Tag)]
     -- | Provides the analyzer with the ability to analyze the word on a single 'P.POS'-tag in
     -- case incomplete construction corpus is present. (Ex. Croatian adjectives and pronouns)
     -- It might be the case that words that can be adjectives can
@@ -194,16 +237,27 @@ getTags a@Analyzer{..} w
               then id                  -- just get the tags
               else expandTags a rw ) $ -- otherwise expand them if necessary
              toTags a $ getPureTags a rw
-        rm = matchOnRegex conf w
+        rm = matchOn conf w
 
--- | Matches all the provided regular expressions and takes the accompanying set
+-- | Matches all the provided matchers and takes the accompanying set
 -- of the first one that matches.
-matchOnRegex :: AConf -> T.Text -> S.Set P.Tag
-matchOnRegex AConf{..} w =
-  let testR = map (first $ \regex -> w =~ regex) regexMatch
+matchOn :: AConf -> T.Text -> S.Set P.Tag
+matchOn AConf{..} w =
+  let testR = map (first $ flip matchOnMatcher w) regexMatch
   in case dropWhile (not . fst) testR of
        []        -> S.empty
        ((_,x):_) -> x
+
+matchOnMatcher :: Matcher -> T.Text -> Bool
+matchOnMatcher Punct          = T.all isPunctuation
+matchOnMatcher Number         = T.all isNumber
+matchOnMatcher AlphaNum       = T.all isAlphaNum
+matchOnMatcher AnyUpper       = T.any isUpper
+matchOnMatcher AllUpper       = T.all isUpper
+matchOnMatcher AnyLower       = T.any isLower
+matchOnMatcher AllLower       = T.all isLower
+matchOnMatcher Capital        = isUpper . T.head
+matchOnMatcher (RegExpr regex)= (=~ regex)
 
 -- | Returns a set of tags from the 'D.DAWG' without any conditions or adjustments.
 -- @w@ should be in reversed form for 'D.DAWG'.
