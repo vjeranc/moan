@@ -9,7 +9,7 @@ Usage
 ===================
 
 
-This library provides the functionality of that kind of analysis. One example of where this might be useful is 'concraft' tagging library. Before the POS-tagging one needs to have a set of possible tags for a word from which the correct one is disambiguated.
+This library provides the functionality of that kind of tags-per-word analysis. One example of where this might be useful is [concraft] tagging library. Before the POS-tagging one needs to have a set of possible tags for a word from which the correct one is disambiguated. Although, it is assumed that the sentences are separated and tokenized.
 
 For a sufficiently large construction corpus this analyzer might only benefit from additional regular expressions for punctuation and number matching. There is a possibility of returning a set of possible tags that isn't complete - the set doesn't contain a correct tag. If construction corpus isn't sufficiently large, there might be a fair amount of incomplete sets on unseen named entities (person names, corporation names etc.).
 
@@ -30,6 +30,7 @@ save "analyzer.gz" an
 ```
 It is assumed that tag attributes are separated with ```:``` for ```P.parseTag```. One could write a different parsing function.
 
+[concraft]: https://github.com/kawu/concraft
 [nkjp-tagset]: http://nkjp.pl/poliqarp/help/ense2.html
 [ru-tagset]: http://ufal.mff.cuni.cz/~hana/morph/rutags.html
 [MultextEast]: http://nl.ijs.si/ME/ "Multext East"
