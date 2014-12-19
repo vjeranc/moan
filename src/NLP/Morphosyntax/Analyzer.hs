@@ -163,6 +163,10 @@ instance Binary AConf where
     put separationLayout
   get = AConf <$> get <*> get <*> get
 
+-- | Can be used for dummy analyzer building.
+emptyConf :: AConf
+emptyConf = AConf 0 [] M.empty
+
 {-|
   This is a layout of conflicts that POS tags might have.
   If there are conflicts the specialized DAWGs are used to resolve them.
