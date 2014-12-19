@@ -226,7 +226,7 @@ instance Binary Analyzer where
         when (x1 /= x2 || y1 /= y2) $ error $
             "Incompatible analyzer code version: " ++ comp ++
             ", expected: " ++ modelVersion
-        -- ^^ Models will be compatible if they match in the first two version numbers
+        -- Models will be compatible if they match in the first two version numbers
         Analyzer <$> get <*> get <*> get <*> get <*> get
 
 -- | Gives back a set of 'P.Tag' given the indices.
