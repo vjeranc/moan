@@ -58,6 +58,7 @@ module NLP.Morphosyntax.Analyzer
 , save
 , load
 , create
+, emptyConf
 -- * Token matching
 , Matcher(..)
 -- * Configuration
@@ -95,7 +96,7 @@ import           Prelude                hiding (elem, notElem)
 
 
 modelVersion :: String
-modelVersion = "0.2.0.0"
+modelVersion = "0.2.0.2"
 
 -- | Replaces the need of writing regular expressions for simple matching.
 -- Matching on punctuation, number, alphanumeric, upper-case tokens or
@@ -220,9 +221,12 @@ instance Binary Analyzer where
         put csl
     get = do
         comp <- get
-        when (comp /= modelVersion) $ error $
+        let (x1:y1:_) = words $ map (\x -> if x == '.' then ' ' else x) comp
+        let (x2:y2:_) = words $ map (\x -> if x == '.' then ' ' else x) modelVersion
+        when (x1 /= x2 || y1 /= y2) $ error $
             "Incompatible analyzer code version: " ++ comp ++
             ", expected: " ++ modelVersion
+        -- ^^ Models will be compatible if they match in the first two version numbers
         Analyzer <$> get <*> get <*> get <*> get <*> get
 
 -- | Gives back a set of 'P.Tag' given the indices.
