@@ -5,6 +5,8 @@ This package provides a morphosyntactic analyzer that is language-agnostic in a 
 
 It solves a problem of providing a set of possible tags for a given word. Instead of just matching on the word-set pair, one can assume that suffixes of an unknown word also hold some information about the set.
 
+For detailed documentation of the internals checkout the package on [Hackage](http://hackage.haskell.org/package/moan).
+
 Usage
 ===================
 
