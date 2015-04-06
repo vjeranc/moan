@@ -1,5 +1,6 @@
 moan
 ===================
+[![Build Status](https://travis-ci.org/vjeranc/moan.svg?branch=master)](https://travis-ci.org/vjeranc/moan)
 
 This package provides a morphosyntactic analyzer that is language-agnostic in a sense that if language uses positional tags (ex. [Multext East][MultextEast], [Polish tagset][nkjp-tagset] etc.) this analyzer can be used. It is also possible to use it for part-of-speech tags only.
 
