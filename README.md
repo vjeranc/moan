@@ -11,7 +11,7 @@ For detailed documentation of the internals checkout the package on [Hackage](ht
 Usage
 ===================
 
-This library provides the functionality of that kind of tags-per-word analysis. One example of where this might be useful is [concraft] tagging library. The analyzer is used in the [concraft-hr] MSD-tagger. Before the POS-tagging one needs to have a set of possible tags for a word from which the correct one is disambiguated. Although, it is assumed that the sentences are separated and tokenized.
+One example of where this might be useful is [concraft] tagging library. The analyzer is used in the [concraft-hr] MSD-tagger. Before the POS-tagging one needs to have a set of possible tags for a word from which the correct one is disambiguated. Although, it is assumed that the sentences are separated and tokenized.
 
 For a sufficiently large construction corpus this analyzer might only benefit from additional regular expressions for easily matched tokens or matchers for punctuation and numbers. There is a possibility of returning a set of possible tags that isn't complete - the set doesn't contain a correct tag. If construction corpus isn't sufficiently large, there might be a fair amount of incomplete sets on unseen named entities (person names, corporation names etc.).
 
