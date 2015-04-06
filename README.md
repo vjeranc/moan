@@ -6,16 +6,16 @@ This package provides a morphosyntactic analyzer that is language-agnostic in a 
 
 It solves a problem of providing a set of possible tags for a given word. Instead of just matching on the word-set pair, one can assume that suffixes of an unknown word also hold some information about the set.
 
-For detailed documentation of the internals checkout the package on [Hackage](http://hackage.haskell.org/package/moan).
+For documentation check out the package on [Hackage](http://hackage.haskell.org/package/moan). For detailed documentation about the internals check the code in this repository.
 
 Usage
 ===================
 
-One example of where this might be useful is [concraft] tagging library. The analyzer is used in the [concraft-hr] MSD-tagger. Before the POS-tagging one needs to have a set of possible tags for a word from which the correct one is disambiguated. Although, it is assumed that the sentences are separated and tokenized.
+One example of where this might be useful is [concraft] tagging library. The analyzer is used in the [concraft-hr] MSD-tagger. Before the POS-tagging one needs to have a set of possible tags for a word from which the correct one is disambiguated. It is assumed that the sentences are separated and tokenized.
 
 For a sufficiently large construction corpus this analyzer might only benefit from additional regular expressions for easily matched tokens or matchers for punctuation and numbers. There is a possibility of returning a set of possible tags that isn't complete - the set doesn't contain a correct tag. If construction corpus isn't sufficiently large, there might be a fair amount of incomplete sets on unseen named entities (person names, corporation names etc.).
 
-If one needs the analyzer to be less aggressive, it is recommended to extend the functionality and remove the sets of possible tags from words which might be named (ex. capitalized words in the middle of a sentence, this can be added in form of auxiliary functions in the future). This is present mostly in use cases where part-of-speech tags of a language contain information whether a word represents a named entity or not, so if this is not a case, there will be no need to extend the current functionality.
+If one needs the analyzer to be less aggressive, it is recommended to extend the functionality and remove the sets of possible tags from words that might be named (ex. capitalized words in the middle of a sentence - this can be added in form of auxiliary functions in the future). This "disadvantage" is mostly present in use cases where part-of-speech tags of a language contain information whether a word represents a named entity or not, so if this is not a case, there will be no need to extend the current functionality.
 
 A simple example of using `GHCi` for construction:
 
